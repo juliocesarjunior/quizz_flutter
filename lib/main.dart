@@ -6,7 +6,12 @@ class PerguntaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Text('Ola Flutter!!!'),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Perguntas'),
+        ),
+        body: Text('ola flutter!!!'),
+      ),
     );
   }
 }
