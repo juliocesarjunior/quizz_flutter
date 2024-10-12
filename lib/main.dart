@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quizz_flutter/resposta.dart';
 import './questao.dart';
 import './resposta.dart';
 
@@ -11,14 +10,23 @@ class _PerguntaAppState extends State<PerguntaApp> {
     setState(() {
       _perguntaSelecionada++;
     });
-    print(_perguntaSelecionada);
   }
 
   @override
   Widget build(BuildContext context) {
     final perguntas = [
-      'Qual é a sua cor favorita?',
-      'Qual é o seu animal favorito?',
+      {
+        'texto': 'Qual é a sua cor favorita?',
+        'repostas': ['Vermelho', 'Preto', 'Rosa', 'Amarelo'],
+      },
+      {
+        'texto': 'Qual é o seu animal favorito?',
+        'repostas': ['Leão', 'Jabuti', 'Arara', 'sapo'],
+      },
+      {
+        'texto': 'Qual é o seu jogo favorito?',
+        'repostas': ['Pokemon', 'COD', 'Fifa', 'Final Fantasy'],
+      }
     ];
     return MaterialApp(
       home: Scaffold(
@@ -27,8 +35,10 @@ class _PerguntaAppState extends State<PerguntaApp> {
         ),
         body: Column(
           children: <Widget>[
-            Questao(perguntas[_perguntaSelecionada]),
-            Resposta('Resposta 1'),
+            Questao(perguntas[_perguntaSelecionada]['texto'] as String),
+            Resposta('Resposta 1', _responder),
+            Resposta('Resposta 3', _responder),
+            Resposta('Resposta 3', _responder),
           ],
         ),
       ),
