@@ -1,50 +1,79 @@
 import 'package:flutter/material.dart';
-import './questao.dart';
-import './resposta.dart';
+import 'package:quizz_flutter/resultado.dart';
+import './questionario.dart';
 
 void main() => runApp(PerguntaApp());
 
 class _PerguntaAppState extends State<PerguntaApp> {
+  @override
   var _perguntaSelecionada = 0;
-  void _responder() {
+  final _title = 'Perguntas';
+  var _pontuacaoTotal = 0;
+
+  final _perguntas = const [
+    {
+      'texto': 'Qual é a sua cor favorita?',
+      'respostas': [
+        {'texto': 'Vermelho', 'pontuacao': 10},
+        {'texto': 'Preto', 'pontuacao': 5},
+        {'texto': 'Rosa', 'pontuacao': 3},
+        {'texto': 'Amarelo', 'pontuacao': 1},
+      ],
+    },
+    {
+      'texto': 'Qual é o seu animal favorito?',
+      'respostas': [
+        {'texto': 'Leão', 'pontuacao': 10},
+        {'texto': 'Jabuti', 'pontuacao': 5},
+        {'texto': 'Arara', 'pontuacao': 3},
+        {'texto': 'Sapo', 'pontuacao': 1},
+      ],
+    },
+    {
+      'texto': 'Qual é o seu jogo favorito?',
+      'respostas': [
+        {'texto': 'Pokemon', 'pontuacao': 10},
+        {'texto': 'COD', 'pontuacao': 5},
+        {'texto': 'Fifa', 'pontuacao': 3},
+        {'texto': 'Final Fantasy', 'pontuacao': 1},
+      ],
+    }
+  ];
+
+  void _responder(int pontuacao) {
+    if (itemPerguntaSelecionada) {
+      setState(() {
+        _perguntaSelecionada++;
+        _pontuacaoTotal += pontuacao;
+      });
+    }
+
+    //print(_pontuacaoTotal);
+  }
+
+  void _reiniciarQuestionario() {
     setState(() {
-      _perguntaSelecionada++;
+      _perguntaSelecionada = 0;
+      _pontuacaoTotal = 0;
     });
   }
 
-  @override
+  bool get itemPerguntaSelecionada {
+    return _perguntaSelecionada < _perguntas.length;
+  }
+
   Widget build(BuildContext context) {
-    final perguntas = [
-      {
-        'texto': 'Qual é a sua cor favorita?',
-        'respostas': ['Vermelho', 'Preto', 'Rosa', 'Amarelo'],
-      },
-      {
-        'texto': 'Qual é o seu animal favorito?',
-        'respostas': ['Leão', 'Jabuti', 'Arara', 'sapo'],
-      },
-      {
-        'texto': 'Qual é o seu jogo favorito?',
-        'respostas': ['Pokemon', 'COD', 'Fifa', 'Final Fantasy'],
-      }
-    ];
-
-    //List<String> respostas = perguntas[_perguntaSelecionada]['respostas'];
-    List<String> respostas =
-        (perguntas[_perguntaSelecionada]['respostas'] as List<dynamic>)
-            .cast<String>();
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Perguntas'),
+          title: Text(_title),
         ),
-        body: Column(
-          children: <Widget>[
-            Questao(perguntas[_perguntaSelecionada]['texto'] as String),
-            ...respostas.map((t) => Resposta(t, _responder)).toList(),
-          ],
-        ),
+        body: itemPerguntaSelecionada
+            ? Questionario(
+                perguntas: _perguntas,
+                perguntaSelecionada: _perguntaSelecionada,
+                quandoResponder: _responder)
+            : Resultado(_pontuacaoTotal, _reiniciarQuestionario),
       ),
     );
   }
